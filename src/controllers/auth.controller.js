@@ -10,7 +10,7 @@ import { errorHandlers } from '../errorHandlers/errorHandlers.js';
 import { tokenConfig } from '../config/token.config.js';
 
 const register = async (req, res) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
 
   const errors = {
     email: errorHandlers.validateEmail(email),
@@ -39,6 +39,7 @@ const register = async (req, res) => {
 
   const newUser = await db.user.create({
     data: {
+      name,
       email,
       password: hashedPass,
       activationToken,
@@ -181,10 +182,14 @@ const resetPasswordToken = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   const { email, resetToken } = req.params;
-  const { password } = req.body;
+  const { password, confirmPassword } = req.body;
+
+  if (password !== confirmPassword) {
+    throw ApiError.badRequest('Diferent passwords');
+  }
 
   if (!email || !resetToken) {
-    throw ApiError.badRequest('wrong email or token');
+    throw ApiError.badRequest('Wrong email or token');
   }
 
   const user = await db.user.findUnique({

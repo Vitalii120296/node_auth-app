@@ -69,7 +69,7 @@ async function sendResetPasswordEmail(email, resetPasswordToken) {
     await send({ email, subject, html });
     console.log('✅ Reset password email sent to', email);
   } catch (error) {
-    console.error('Error sending email:', error.message);
+    throw ApiError.badRequest('Error sending email:', error.message);
   }
 }
 
@@ -81,9 +81,9 @@ async function sendChangedEmail(email) {
 
   try {
     await send({ email, subject, html });
-    console.log('✅ Reset password email sent to', email);
+    console.log('✅ Email has been change', email);
   } catch (error) {
-    console.error('Error sending email:', error.message);
+    throw ApiError.badRequest('Error sending email:', error.message);
   }
 }
 

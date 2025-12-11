@@ -31,7 +31,11 @@ const changeData = async (req, res) => {
 
 const changePassword = async (req, res) => {
   const { email } = req.params;
-  const { oldPassword, newPassword } = req.body;
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+
+  if (newPassword !== confirmPassword) {
+    throw ApiError.badRequest('Different passwords')
+  }
 
   const user = await userService.findByEmail(email);
 

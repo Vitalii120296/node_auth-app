@@ -28,7 +28,7 @@ const changeData = (data) => {
       id: data.id,
     },
     data: {
-      ...data,
+      name: data.name,
     },
   });
 
